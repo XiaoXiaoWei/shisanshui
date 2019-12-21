@@ -1,7 +1,7 @@
 package sss1
 
 import (
-	"shisanshui/utils"
+	"github.com/XiaoXiaoWei/shisanshui/utils"
 	"sort"
 )
 

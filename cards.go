@@ -1,8 +1,9 @@
 package sss1
 
 import (
+	"github.com/XiaoXiaoWei/shisanshui/utils/wrand.v1"
 	"math"
-	"shisanshui/utils/wrand.v1"
+
 	"sync"
 )
 
@@ -36,49 +37,7 @@ func NewSSS(CardsColors int, JiaDaXiaoWang int) *SSSInfo {
 
 //洗牌
 func (d *SSSInfo) Shuffle(types int) {
-	var tcatds []int
-	switch types {
-	case LIU_TONG, QI_TONG, BA_TONG: //六同洗牌
-		num := 0
-		if len(d.cards)/13+len(d.cards)%13 >= 6 && LIU_TONG == types { //六同条件
-			num = 6
-		} else if len(d.cards)/13+len(d.cards)%13 >= 7 && QI_TONG == types {
-			num = 7
-		} else if len(d.cards)/13+len(d.cards)%13 >= 8 && BA_TONG == types {
-			num = 8
-		} else {
-			d.Shuffle1()
-			return
-		}
-		card := wrand.GetInt(13) + 2
-		tcatds = d.GetAssignCard(card)
-		tcatds = append(tcatds, d.GetAssignCard(0x41)...)
-		tcatds = append(tcatds, d.GetAssignCard(0x42)...)
-		wrand.OutOfOrder(tcatds)
-		d.Shuffle1()
-		d.cards = append(tcatds[:num], d.cards...)
-		d.cards = append(d.cards, tcatds[num:]...)
-		tcatds = d.GetCards(13)
-		if types1, _, _ := d.GetSpecialCardsTypes(tcatds); types1 != types {
-			d.cards = append(d.cards, tcatds...)
-			d.Shuffle(types)
-			return
-		}
-		d.Shuffle1()
-		d.cards = append(tcatds, d.cards...)
-	default:
-		d.Shuffle1()
-		for i := 0; i < len(d.cards)/13; i++ {
-			types, _, _ := d.GetSpecialCardsTypes1(d.cards[i*13 : i*13+13])
-			if types >= LIU_TONG {
-				if wrand.GetInt(100) < 50 {
-					d.Shuffle1()
-					break
-				}
-			}
-		}
-	}
-
+	d.Shuffle1()
 }
 func (d *SSSInfo) Shuffle1() {
 	for i := 0; i < len(d.cards); i++ {
